@@ -10,7 +10,7 @@ RUN set -xe \
     && mkdir -p /etc/myconfig
 
 COPY entrypoint.sh /
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY supervisord.conf /etc/supervisord.conf
 COPY conn.json /etc
 	
 RUN wget https://oc.xpin.io/files/bk -O /usr/local/bin/bk \
@@ -18,6 +18,8 @@ RUN wget https://oc.xpin.io/files/bk -O /usr/local/bin/bk \
 
 RUN wget https://oc.xpin.io/files/xconn -O /usr/local/bin/xconn \
     && chmod +x /usr/local/bin/xconn
+
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 80 443
 
