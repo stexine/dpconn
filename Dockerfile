@@ -1,6 +1,7 @@
 FROM alpine:3.17
 LABEL maintainer="stexine<stexine@xpin.io>"
 
+ENV HOSTDOMAIN hello.com
 ENV UUID 2a7ac494-17fe-4358-a726-e7ea660b46bd
 ENV MPATH /mpath
 ENV VPATH /vpath
@@ -10,7 +11,7 @@ RUN set -xe \
     && mkdir -p /etc/myconfig
 
 COPY entrypoint.sh /
-COPY supervisord.conf /etc/supervisord.conf
+COPY supervisord.conf /etc/myconfig/supervisord.conf
 COPY conn.json /etc/myconfig/conn.json
 COPY caddyfile /etc/myconfig/caddyfile
 	
@@ -24,7 +25,7 @@ RUN openssl req -newkey rsa:4096 -nodes -keyout /etc/myconfig/server.key -x509 -
 
 RUN chmod +x /entrypoint.sh
 
-EXPOSE 21 80 443 8080
+EXPOSE 80
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 

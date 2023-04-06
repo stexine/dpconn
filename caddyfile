@@ -1,3 +1,9 @@
-localhost:80 {
-  respond "Server is up and running!"
+HOSTDOMAIN:80 {
+    respond "Server is up and running!"
+
+    reverse_proxy VPATH 127.0.0.1:2001 {
+        transport http {
+            versions h2c
+        }
+    }
 }

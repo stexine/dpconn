@@ -4,160 +4,49 @@
     },
     "inbounds": [
         {
-            "port": 443,
-            "protocol": "vless",
-            "settings": {
-                "clients": [
-                    {
-                        "id": "UUID",
-                        "flow": "xtls-rprx-direct",
-                        "level": 0,
-                        "email": "vuser@sconn.com"
-                    }
-                ],
-                "decryption": "none",
-                "fallbacks": [
-                    {
-                        "dest": 1380,
-                        "xver": 1
-                    },
-                    {
-                        "path": "VPATH",
-                        "dest": 1381,
-                        "xver": 1
-                    },
-                    {
-                        "path": "/vmtcp", 
-                        "dest": 1382,
-                        "xver": 1
-                    },
-                    {
-                        "path": "MPATH", 
-                        "dest": 1383,
-                        "xver": 1
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "tcp",
-                "security": "xtls",
-                "xtlsSettings": {
-                    "alpn": [
-                        "http/1.1"
-                    ],
-                    "certificates": [
-                        {
-                            "certificateFile": "/etc/myconfig/server.crt",
-                            "keyFile": "/etc/myconfig/server.key"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "port": 1380,
-            "listen": "127.0.0.1",
-            "protocol": "trojan",
-            "settings": {
-                "clients": [
-                    {
-                        "password": "UUID",
-                        "level": 0,
-                        "email": "vuser@sconn.com"
-                    }
-                ],
-                "fallbacks": [
-                    {
-                        "dest": "localhost:80"
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "tcp",
-                "security": "none",
-                "tcpSettings": {
-                    "acceptProxyProtocol": true
-                }
-            }
-        },
-        {
-            "port": 1381,
+            "port": 2001,
             "listen": "127.0.0.1",
             "protocol": "vless",
             "settings": {
                 "clients": [
                     {
                         "id": "UUID",
-                        "level": 0,
-                        "email": "vuser@sconn.com"
+                        "email": "love@example.com"
                     }
                 ],
                 "decryption": "none"
             },
             "streamSettings": {
-                "network": "ws",
                 "security": "none",
-                "wsSettings": {
-                    "acceptProxyProtocol": true, // 提醒：若你用 Nginx/Caddy 等反代 WS，需要删掉这行
-                    "path": "VPATH"
-                }
-            }
-        },
-        {
-            "port": 1382,
-            "listen": "127.0.0.1",
-            "protocol": "vmess",
-            "settings": {
-                "clients": [
-                    {
-                        "id": "UUID", // 填写你的 UUID
-                        "level": 0,
-                        "email": "vuser@sconn.com"
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "tcp",
-                "security": "none",
-                "tcpSettings": {
-                    "acceptProxyProtocol": true,
-                    "header": {
-                        "type": "http",
-                        "request": {
-                            "path": [
-                                "/vmtcp" // 必须换成自定义的 PATH，需要和分流的一致
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "port": 1383,
-            "listen": "127.0.0.1",
-            "protocol": "vmess",
-            "settings": {
-                "clients": [
-                    {
-                        "id": "UUID", // 填写你的 UUID
-                        "level": 0,
-                        "email": "vuser@sconn.com"
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "ws",
-                "security": "none",
-                "wsSettings": {
-                    "acceptProxyProtocol": true, // 提醒：若你用 Nginx/Caddy 等反代 WS，需要删掉这行
-                    "path": "MPATH" // 必须换成自定义的 PATH，需要和分流的一致
+                "network": "h2",
+                "httpSettings": {
+                    "path": "VPATH",
+                    "host": [
+                        "HOSTDOMAIN"
+                    ]
                 }
             }
         }
     ],
     "outbounds": [
         {
-            "protocol": "freedom"
+            "tag": "direct",
+            "protocol": "freedom",
+            "settings": {}
+        },
+        {
+            "tag": "blocked",
+            "protocol": "blackhole",
+            "settings": {}
         }
-    ]
+    ],
+    "routing": {
+        "domainStrategy": "AsIs",
+        "rules": [
+            {
+                "type": "field",
+                "outboundTag": "blocked"
+            }
+        ]
+    }
 }
