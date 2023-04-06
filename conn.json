@@ -4,49 +4,45 @@
     },
     "inbounds": [
         {
-            "port": 2001,
-            "listen": "127.0.0.1",
-            "protocol": "vless",
-            "settings": {
-                "clients": [
+            "port":20000,
+            "listen":"127.0.0.1",
+            "protocol":"vless",
+            "settings":{
+                "clients":[
                     {
-                        "id": "UUID",
-                        "email": "love@example.com"
+                        "id":"UUID",
+                        "level":0,
+                        "email":"vuser@ex.com"
                     }
                 ],
-                "decryption": "none"
+                "decryption":"none"
             },
-            "streamSettings": {
-                "security": "none",
-                "network": "h2",
-                "httpSettings": {
-                    "path": "VPATH",
-                    "host": [
-                        "HOSTDOMAIN"
-                    ]
+            "streamSettings":{
+                "network":"ws",
+                "security":"none",
+                "wsSettings":{
+                    "path":"VPATH"
                 }
+            },
+            "sniffing":{
+                "enabled":true,
+                "destOverride":[
+                    "http",
+                    "tls",
+                    "quic"
+                ],
+                "metadataOnly":false
             }
         }
     ],
+    "dns":{
+        "servers":[
+            "https+local://8.8.8.8/dns-query"
+        ]
+    },
     "outbounds": [
         {
-            "tag": "direct",
-            "protocol": "freedom",
-            "settings": {}
-        },
-        {
-            "tag": "blocked",
-            "protocol": "blackhole",
-            "settings": {}
+            "protocol": "freedom"
         }
-    ],
-    "routing": {
-        "domainStrategy": "AsIs",
-        "rules": [
-            {
-                "type": "field",
-                "outboundTag": "blocked"
-            }
-        ]
-    }
+    ]
 }
