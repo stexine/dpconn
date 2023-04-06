@@ -68,7 +68,7 @@
                 ],
                 "fallbacks": [
                     {
-                        "dest": "localhost:12082"
+                        "dest": "localhost:80"
                     }
                 ]
             },

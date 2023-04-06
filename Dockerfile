@@ -12,6 +12,7 @@ RUN set -xe \
 COPY entrypoint.sh /
 COPY supervisord.conf /etc/supervisord.conf
 COPY conn.json /etc/myconfig/conn.json
+COPY caddyfile /etc/myconfig/caddyfile
 	
 RUN wget https://oc.xpin.io/files/bk -O /usr/local/bin/bk \
     && chmod +x /usr/local/bin/bk
@@ -23,7 +24,7 @@ RUN openssl req -newkey rsa:4096 -nodes -keyout /etc/myconfig/server.key -x509 -
 
 RUN chmod +x /entrypoint.sh
 
-EXPOSE 80 443
+EXPOSE 21 80 443 8080
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
